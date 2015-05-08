@@ -8,6 +8,7 @@ import java.util.*; // Stack and Queue
 public class Melody 
 {
    LinkedList<Note> theSong;
+   int carolyn;
    
    public Melody(Queue<Note> song)
    {
