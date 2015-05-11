@@ -27,8 +27,12 @@ public class Note {
    
    // pre : duration > 0, otherwise throws an IllegalArgumentException
    //       constructs a note with the passed in duration, pitch and repeat settings. 
-   public Note(double duration, Pitch note, boolean repeat) {
-      this(duration, note, 0, Accidental.NATURAL, repeat);
+   public Note(double duration, Pitch note, Accidental accidental) {
+      this(duration, note, 4, accidental, false);
+   }
+   
+   public Note(Pitch note, Accidental accidental, int octave) {
+      this(0.5, note, octave, accidental, false);
    }
    
    // returns the length of the note in seconds

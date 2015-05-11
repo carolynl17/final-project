@@ -1,4 +1,6 @@
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
 public class TestGUI
 {
@@ -6,6 +8,17 @@ public class TestGUI
    {
       JFrame frame = new JFrame();
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      int choice = JOptionPane.showConfirmDialog(null, "Are you doing well today?");
+      frame.setSize(new Dimension(250, 100));
+      frame.setTitle("How are you?");
+
+      frame.setLayout(new FlowLayout());
+      JButton positive = new JButton("I'm well.");
+      positive.addActionListener(new TestPopUp());
+      frame.add(positive);
+      JButton negative = new JButton("Life sucks.");
+      negative.addActionListener(new TestPopUp());
+      frame.add(negative);
+
+      frame.setVisible(true);
    }
 }
