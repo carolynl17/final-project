@@ -4,7 +4,9 @@
 // A Note object represents a musical note in scientific music notation. 
 // For example, middle C is represented as C4. 
 
-public class Note {
+import java.awt.event.*;
+
+public class Note implements ActionListener{
    private Pitch note;
    private double duration;
    private int octave;
@@ -28,7 +30,11 @@ public class Note {
    // pre : duration > 0, otherwise throws an IllegalArgumentException
    //       constructs a note with the passed in duration, pitch and repeat settings. 
    public Note(double duration, Pitch note, Accidental accidental) {
-      this(duration, note, 4, accidental, false);
+      this(duration, note, 5, accidental, false);
+   }
+   
+   public void actionPerformed(ActionEvent event) {
+      this.play();
    }
    
    public Note(Pitch note, Accidental accidental, int octave) {

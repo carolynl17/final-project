@@ -14,7 +14,7 @@ public class OneKey
       frame.add(createButton(new Note(0.5, Pitch.G, Accidental.NATURAL)));
       frame.add(createButton(new Note(0.5, Pitch.A, Accidental.NATURAL)));
       frame.add(createButton(new Note(0.5, Pitch.B, Accidental.NATURAL)));
-      frame.add(createButton(new Note(Pitch.C, Accidental.NATURAL, 5)));
+      frame.add(createButton(new Note(Pitch.C, Accidental.NATURAL, 6)));
       frame.setVisible(true);
    }
    
@@ -31,7 +31,7 @@ public class OneKey
    public static JButton createButton(Note note)
    {
       JButton key = new JButton("");
-      key.addActionListener(new PlayNote(note));
+      key.addActionListener(note);
       return key;
    }
 }
