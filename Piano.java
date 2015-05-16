@@ -8,13 +8,22 @@ import java.util.List;
 
 public class Piano extends JPanel implements MouseInputListener, ActionListener
 {
+/** The black keys of the piano
+  */
    private List<Key> blackKeys;
+   
+/** The white keys of the piano
+  */
    private List<Key> whiteKeys;
+   
+/** The timer that allows the note to keep playing the whole time
+  * that the key is pressed.
+  */
    private Timer playNote;
    
    private Key current;
    
-   public final int MILLISECS_NOTE = 10; // length of note will be accurate to 10 milliseconds
+   public final int MILLISECS_NOTE = 10; // accuracy of the length of the note
    public final int WIDTH = 768;
    public final int HEIGHT = 300;
    
@@ -27,6 +36,8 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener
       frame.setTitle("KEYBOARD");
       
       frame.add(piano);
+      frame.addMouseListener(piano);
+      frame.addMouseMotionListener(piano);
       frame.setVisible(true);
    }
    
@@ -52,13 +63,13 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener
       currentX = 4 * blackKeyWidth / 3;
       int count = -1; // adds 1 before accessing the index
       blackKeys.add(new Key(currentX, y, blackKeyWidth, blackKeyHeight, blackNotes.get(++count)));
-      currentX += (int) (7.0 * blackKeyWidth / 3.0);
+      currentX += 7 * blackKeyWidth / 3;
       blackKeys.add(new Key(currentX, y, blackKeyWidth, blackKeyHeight, blackNotes.get(++count)));
-      currentX += (int) (43.0 * blackKeyWidth / 12.0);
+      currentX += 43 * blackKeyWidth / 12;
       blackKeys.add(new Key(currentX, y, blackKeyWidth, blackKeyHeight, blackNotes.get(++count)));
-      currentX += (int) (9.0 * blackKeyWidth / 4.0);
+      currentX += 9 * blackKeyWidth / 4;
       blackKeys.add(new Key(currentX, y, blackKeyWidth, blackKeyHeight, blackNotes.get(++count)));
-      currentX += (int) (9.0 * blackKeyWidth / 4.0);
+      currentX += 9 * blackKeyWidth / 4;
       blackKeys.add(new Key(currentX, y, blackKeyWidth, blackKeyHeight, blackNotes.get(++count)));
       
       // create the timer
@@ -104,22 +115,24 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener
       super.paintComponent(g);
       for (Key k : whiteKeys)
       {
-         k.draw(g, true);
+         k.setGraphics(g);
+         k.draw(true);
       }
       for (Key k : blackKeys) 
       {
-         k.draw(g, false); //draw black keys second so they are on top
+         k.setGraphics(g);
+         k.draw(false); //draw black keys second so they are on top
       }
    }
    
    public void mousePressed(MouseEvent event)
    {
-      playNote.start();
       for (Key k : blackKeys)
       {  
          if (k.isPressed(event.getPoint()))
          {
             current = k;
+            k.changeColor();
             return;
          }
       }
@@ -128,9 +141,11 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener
          if (k.isPressed(event.getPoint()))
          {
             current = k; 
+            k.changeColor();
             return;
          }
       }
+      playNote.start();
    }
    
    public void mouseReleased(MouseEvent event)
@@ -146,6 +161,6 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener
    
    public void actionPerformed(ActionEvent event) 
    {
-      current.play();
+      current.play(); // Timer plays the note every 10 milliseconds
    }
 }
