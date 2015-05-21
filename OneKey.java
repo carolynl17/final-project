@@ -6,7 +6,8 @@ public class OneKey
 {
    public static void main(String[] args)
    {
-      JFrame frame = createFrame();
+      // creates a piano (one octave) using all buttons
+      /*JFrame frame = createFrame();
       frame.add(createButton(new Note(0.5, Pitch.C, Accidental.NATURAL)));
       frame.add(createButton(new Note(0.5, Pitch.D, Accidental.NATURAL)));
       frame.add(createButton(new Note(0.5, Pitch.E, Accidental.NATURAL)));
@@ -15,7 +16,9 @@ public class OneKey
       frame.add(createButton(new Note(0.5, Pitch.A, Accidental.NATURAL)));
       frame.add(createButton(new Note(0.5, Pitch.B, Accidental.NATURAL)));
       frame.add(createButton(new Note(Pitch.C, Accidental.NATURAL, 6)));
-      frame.setVisible(true);
+      frame.setVisible(true);*/
+      // creates a single key that plays a note when clicked
+      
    }
    
    public static JFrame createFrame()

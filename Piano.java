@@ -21,16 +21,30 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener
   */
    private Timer playNote;
    
+/** The key that is currently being played
+  */
    private Key current;
    
-   public final int MILLISECS_NOTE = 10; // accuracy of the length of the note
-   public final int WIDTH = 768;
-   public final int HEIGHT = 300;
+/** The frame that the piano is in
+  */
+   public static JFrame frame;
    
-   public static void main(String[] args)
+/** The number of milliseconds that the timer plays the note for each interval
+  */
+   public final int MILLISECS_NOTE = 150; // accuracy of the length of the note in milliseconds
+   
+/** The width of the frame
+  */
+   public final int WIDTH = 768;
+   
+/** The height of the frame
+  */
+   public final int HEIGHT = 400;
+   
+   /*public static void main(String[] args)
    {
       Piano piano = new Piano();
-      JFrame frame = new JFrame();
+      frame = new JFrame();
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.setSize(piano.WIDTH, piano.HEIGHT);
       frame.setTitle("KEYBOARD");
@@ -39,14 +53,18 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener
       frame.addMouseListener(piano);
       frame.addMouseMotionListener(piano);
       frame.setVisible(true);
-   }
+   }*/
    
+/** Creates a piano with of the specified octave. If twoOctaves is true, the octave 
+  * above will also 
+  *
+  */
    public Piano(int octave, boolean twoOctaves)
    {
       // create the white key objects
       int currentX = 0;
       int y = 0;
-      int whiteKeyWidth = WIDTH / 8;
+      int whiteKeyWidth = WIDTH / 8; // There are 8 white keys
       blackKeys = new ArrayList<Key>();
       whiteKeys = new ArrayList<Key>();
       List<Note> whiteNotes = oneOctaveNaturals(octave);
@@ -77,11 +95,18 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener
          
    }
    
+/** Default constructor--creates a single octave piano that starts at middle C
+  */
    public Piano()
    {
       this(5, false);
    }
    
+/** Creates a list of notes representing the "white keys" of the keyboard, starting
+  * with C and ending with C in the octave above
+  * 
+  * @param octave - the octave in which to create the notes (of the starting note)
+  */
    public List<Note> oneOctaveNaturals(int octave)
    {
       double len = MILLISECS_NOTE / 1000.0;
@@ -93,10 +118,16 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener
       theNotes.add(new Note(len, Pitch.G, octave));
       theNotes.add(new Note(len, Pitch.A, octave));
       theNotes.add(new Note(len, Pitch.B, octave));
-      theNotes.add(new Note(len, Pitch.C, octave));
+      theNotes.add(new Note(len, Pitch.C, octave + 1));
       return theNotes;
    }
    
+/** Creates a list of notes representing the "black keys" of single octave 
+  * starting with C# and ending with A#
+  *
+  * @param octave - the octave in which to create the notes
+  * @return - the list of notes
+  */
    public List<Note> oneOctaveBlackKeys(int octave)
    {
       double len = MILLISECS_NOTE / 1000.0;
@@ -110,57 +141,108 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener
       return theNotes;
    }
    
+/** Overrides JPanel's paintComponent method--draws the keys of the keyboard
+  *
+  * @param g - the graphics that method draws to
+  */
    public void paintComponent(Graphics g)
    {
       super.paintComponent(g);
       for (Key k : whiteKeys)
       {
          k.setGraphics(g);
-         k.draw(true);
+         k.draw();
       }
       for (Key k : blackKeys) 
       {
          k.setGraphics(g);
-         k.draw(false); //draw black keys second so they are on top
+         k.draw(); //draw black keys second so they are on top
       }
    }
    
+/** Called when the mouse is pressed down--plays the key that is pressed on and
+  * changes the color of the pressed key
+  *
+  * @param event - the mouse's action (pressed)
+  */
    public void mousePressed(MouseEvent event)
    {
-      for (Key k : blackKeys)
-      {  
-         if (k.isPressed(event.getPoint()))
-         {
-            current = k;
-            k.changeColor();
-            return;
-         }
-      }
       for (Key k : whiteKeys)
       {
          if (k.isPressed(event.getPoint()))
          {
             current = k; 
             k.changeColor();
-            return;
+            break;
          }
       }
+      for (Key k : blackKeys) // because the keys overlap, so black keys take precedence
+      {  
+         if (k.isPressed(event.getPoint()))
+         {
+            current = k;
+            k.changeColor();
+            break;
+         }
+      }
+      frame.update(current.getGraphics());
       playNote.start();
    }
-   
+
+/** Called when the mouse is released--stops the timer that plays the note
+  * and changes the key back to black or white
+  *
+  * @param event - the mouse's action (release)
+  */
    public void mouseReleased(MouseEvent event)
    {
+      current.draw();
+      frame.update(current.getGraphics());
       playNote.stop();
    }
    
+    //NOTE: I had to implement MouseInputListener rather than extend MouseInputAdapter
+    //       because Piano already extends JPanel, so the empty methods are necessary.
+    
+/** Called when the mouse is clicked--nothing happens
+  *
+  * @param event - the mouse's action (click)
+  */
    public void mouseClicked(MouseEvent event) {}
+   
+/** Called when the mouse is dragged--nothing happens
+  *
+  * @param event - the mouse's action (dragging)
+  */
    public void mouseDragged(MouseEvent event) {}
+   
+/** Called when the mouse enters the component--nothing happens
+  *
+  * @param event - the mouse's action (entering)
+  */
    public void mouseEntered(MouseEvent event) {}
+   
+/** Called when the mouse exits the component--nothing happens
+  *
+  * @param event - the mouse's action (exiting)
+  */
    public void mouseExited(MouseEvent event) {}
+
+/** Called when the mouse moves--nothing happens
+  *
+  * @param event - the mouse's action (movement)
+  */
    public void mouseMoved(MouseEvent event) {}
    
+/** The timer calls this method in regular intervals-- plays the current note
+  * that is being pressed 
+  * 
+  * @param event - the ActionEvent that occured 
+  */
    public void actionPerformed(ActionEvent event) 
    {
       current.play(); // Timer plays the note every 10 milliseconds
    }
+   
+   
 }

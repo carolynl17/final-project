@@ -100,7 +100,7 @@ public class MelodyMain {
 			double duration = input.nextDouble();
 			Pitch pitch = Pitch.valueOf(input.next());
 			if(pitch.equals(Pitch.R)) {
-				song.add(new Note(duration, pitch, input.nextBoolean()));          
+				song.add(new Note(duration, pitch, 1, Accidental.NATURAL, input.nextBoolean()));          
 			} else {
 				song.add(new Note(duration, pitch, input.nextInt(), 
 					Accidental.valueOf(input.next()), input.nextBoolean()));
