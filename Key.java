@@ -25,6 +25,8 @@ public class Key
 /** The graphics that the key is drawn with
   */
    private Graphics g;
+   
+   private Color color;
       
 /** Constructs a key with the upper left coordinate as the specified x and y values
   * and the specified width and height and note
@@ -42,6 +44,7 @@ public class Key
       rightX = x + theWidth;
       lowerY = y + theHeight;
       note = theNote;
+      color = Color.BLACK;
    }
    
 /** Plays the note represented by the key
@@ -84,8 +87,8 @@ public class Key
   */
    public void draw()
    {
-      g.setColor(Color.BLACK);
-      if (note.getAccidental() == Accidental.NATURAL)
+      g.setColor(color);
+      if (note.getAccidental() == Accidental.NATURAL && color.equals(Color.BLACK))
       {
          g.drawRect(leftX, upperY, rightX - leftX, lowerY - upperY);
       }
@@ -93,6 +96,7 @@ public class Key
       {
          g.fillRect(leftX, upperY, rightX - leftX, lowerY - upperY);
       }
+      color = Color.BLACK;
    }
    
 /** Changes the color of the key to indicate that it is being played
@@ -100,35 +104,13 @@ public class Key
   */
    public void changeColor()
    {
-      if (note.getPitch() == Pitch.C)
+      float ordinal = (float) note.getPitch().ordinal();
+      if (note.getAccidental() == Accidental.SHARP) // all black keys are sharp
       {
-         g.setColor(Color.RED);
+         ordinal += (float) .5;
       }
-      else if (note.getPitch() == Pitch.D)
-      {
-         g.setColor(Color.ORANGE);
-      }
-      else if (note.getPitch() == Pitch.E)
-      {
-         g.setColor(Color.YELLOW);
-      }
-      else if (note.getPitch() == Pitch.F)
-      {
-         g.setColor(Color.GREEN);
-      }
-      else if (note.getPitch() == Pitch.G)
-      {
-         g.setColor(Color.BLUE);
-      }
-      else if (note.getPitch() == Pitch.A)
-      {
-         g.setColor(Color.MAGENTA);
-      }
-      else //(note.getPitch() == Pitch.B)
-      {
-         g.setColor(Color.PINK);
-      }
-      g.fillRect(leftX, upperY, rightX - leftX, lowerY - upperY);
+      float div = ordinal / (float) Pitch.values().length;
+      color = Color.getHSBColor(div, 1, (float) .7);
    }
 
 /** Checks if the key has been pressed on

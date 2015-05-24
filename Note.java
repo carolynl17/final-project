@@ -41,6 +41,10 @@ public class Note implements ActionListener{
       this(duration, note, octave, Accidental.NATURAL, false);
    }
    
+   public Note(double duration, Pitch note) {
+      this(duration, note, 5, Accidental.NATURAL, false);
+   }
+   
    public void actionPerformed(ActionEvent event) {
       this.play();
    }

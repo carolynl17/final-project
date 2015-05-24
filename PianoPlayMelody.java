@@ -2,18 +2,9 @@ import javax.swing.*; // JComponents
 import java.awt.event.*; // MouseEvents
 import java.awt.*; //Layouts
 
-public class PianoPlayMelody extends Piano
+public class PianoPlayMelody 
 {
    public PianoPlayMelody()
-   {
-      super();
-   }
-   
-   public void mousePressed(MouseEvent event){} //nothing should happen
-   
-   public void mouseReleased(MouseEvent event){} //nothing should happen
-   
-   public void actionPerformed(ActionEvent event)
    {
       JFrame frame = new JFrame();
       JPanel panel1 = new JPanel();
@@ -41,9 +32,7 @@ public class PianoPlayMelody extends Piano
       frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
       frame.pack();
       frame.setVisible(true);
-
+      
    }
-   
-   
-   
+
 }

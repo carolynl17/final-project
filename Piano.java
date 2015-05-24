@@ -23,7 +23,7 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener
    
 /** The key that is currently being played
   */
-   private Key current;
+   protected Key current;
    
 /** The frame that the piano is in
   */
@@ -55,11 +55,10 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener
       frame.setVisible(true);
    }*/
    
-/** Creates a piano with of the specified octave. If twoOctaves is true, the octave 
-  * above will also 
+/** Creates a piano with of the specified octave.
   *
   */
-   public Piano(int octave, boolean twoOctaves)
+   public Piano(int octave)
    {
       // create the white key objects
       int currentX = 0;
@@ -91,7 +90,19 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener
       blackKeys.add(new Key(currentX, y, blackKeyWidth, blackKeyHeight, blackNotes.get(++count)));
       
       // create the timer
-      playNote = new Timer(MILLISECS_NOTE, this); 
+      playNote = new Timer(MILLISECS_NOTE, this);
+      
+      // create frame and add piano
+      JFrame frame = new JFrame();
+      Piano.frame = frame;
+      frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+      frame.setSize(this.WIDTH, this.HEIGHT);
+      frame.setTitle("KEYBOARD");
+      
+      frame.add(this);
+      frame.addMouseListener(this);
+      frame.addMouseMotionListener(this);
+      frame.setVisible(true); 
          
    }
    
@@ -99,7 +110,7 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener
   */
    public Piano()
    {
-      this(5, false);
+      this(5);
    }
    
 /** Creates a list of notes representing the "white keys" of the keyboard, starting
@@ -172,7 +183,6 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener
          if (k.isPressed(event.getPoint()))
          {
             current = k; 
-            k.changeColor();
             break;
          }
       }
@@ -181,11 +191,11 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener
          if (k.isPressed(event.getPoint()))
          {
             current = k;
-            k.changeColor();
             break;
          }
       }
-      frame.update(current.getGraphics());
+      current.changeColor();
+      repaint();
       playNote.start();
    }
 
@@ -196,9 +206,9 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener
   */
    public void mouseReleased(MouseEvent event)
    {
-      current.draw();
       frame.update(current.getGraphics());
       playNote.stop();
+      repaint();
    }
    
     //NOTE: I had to implement MouseInputListener rather than extend MouseInputAdapter

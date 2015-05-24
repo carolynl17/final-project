@@ -4,17 +4,18 @@ import java.awt.event.*; // ActionListener
 
 public class PianoMenu implements ActionListener
 {
+   
    public static void main(String[] args)
    {
       //create frame, set title, layout
       JFrame frame = new JFrame();
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      frame.setTitle("How are you?");
+      frame.setTitle("CLAVIER");
       frame.setLayout(new BorderLayout());
       
       //create fonts for instructions
-      Font menuFont = new Font("Times New Roman", Font.PLAIN, 15);
-      Font defFont = new Font("Times New Roman", Font.ITALIC, menuFont.getSize() - 2);
+      Font menuFont = new Font("Times New Roman", Font.PLAIN, 14);
+      Font defFont = new Font("Times New Roman", Font.ITALIC, menuFont.getSize() - 3);
       
       //create directions as JLabel, add to frame
       String menu = "Welcome to the Clavier¹!\nWhat would you like to do?";
@@ -37,7 +38,7 @@ public class PianoMenu implements ActionListener
       record.addActionListener(new PianoMenu());
       choices.add(record);
       JButton listen = new JButton("Listen to a Song");
-      listen.addActionListener(new PianoPlayMelody());
+      listen.addActionListener(new PianoMenu());
       choices.add(listen);
       frame.add(choices, BorderLayout.CENTER);
 
@@ -48,16 +49,18 @@ public class PianoMenu implements ActionListener
    
    public void actionPerformed(ActionEvent event)
    {
-      Piano piano = new Piano();
-      JFrame frame = new JFrame();
-      Piano.frame = frame;
-      frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-      frame.setSize(piano.WIDTH, piano.HEIGHT);
-      frame.setTitle("KEYBOARD");
-      
-      frame.add(piano);
-      frame.addMouseListener(piano);
-      frame.addMouseMotionListener(piano);
-      frame.setVisible(true);
+      if (event.getActionCommand().equals("Play Piano"))
+      {
+         Piano piano = new Piano();
+      }
+      else if (event.getActionCommand().equals("Listen to a Song"))
+      {
+         OpenFile song = new OpenFile();
+      }
+      else // (event.getActionCommand().equals("Record a Song"))
+      {
+         CreateFile file = new CreateFile();
+      }
    }
+   
 }
