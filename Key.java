@@ -1,4 +1,13 @@
-import java.awt.*;
+// Carolyn Lober
+// May 26, 2015
+// CS III
+// RecordPiano.java
+
+// This class defines a Key object, which the piano consists of. 
+// Keys contain information about what note they represent and 
+// the size and position on the piano.
+
+import java.awt.*; // Graphics
 
 public class Key
 {
@@ -26,6 +35,8 @@ public class Key
   */
    private Graphics g;
    
+/** The current color of the key (changes when the key is played)
+  */
    private Color color;
       
 /** Constructs a key with the upper left coordinate as the specified x and y values
@@ -53,15 +64,6 @@ public class Key
    public void play()
    {
       note.play();
-   }
-   
-/** Plays the note an octave above that represented by the key
-  */
-   public void playOctaveUp()
-   {
-      note.setOctave(note.getOctave() + 1);
-      note.play();
-      note.setOctave(note.getOctave() - 1);
    }
    
 /** Sets the graphics of the key 
@@ -116,7 +118,6 @@ public class Key
 /** Checks if the key has been pressed on
   * 
   * @param p - the point representing the position of the click
-  * 
   * @return - true if the key has been pressed on, false if not
   */
    public boolean isPressed(Point p)

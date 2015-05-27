@@ -69,7 +69,7 @@ public class Melody
 /** Changes the length of the notes to make the song faster or slower
   * by the factor input into the parameters
   * 
-  * @param the factor by which to change the tempo
+  * @param tempo - the factor by which to change the tempo
   */
    public void changeTempo(double tempo)
    {

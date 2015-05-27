@@ -1,3 +1,11 @@
+// Carolyn Lober
+// May 26, 2015
+// CS III
+// Piano.java
+
+// This class defines a piano object that plays notes with both the 
+// mouse and the keyboard for as long as you press it down. 
+
 import java.awt.event.*; // ActionListener, KeyListener
 import javax.swing.*; // JPanel, Timer, JFrame
 import javax.swing.event.*; // MouseInputListener
@@ -25,13 +33,9 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener,
   */
    protected Key current;
    
-/** The frame that the piano is in
-  */
-   public static JFrame frame;
-   
 /** The number of milliseconds that the timer plays the note for each interval
   */
-   public final int MILLISECS_NOTE = 150; // accuracy of the length of the note in milliseconds
+   public final int MILLISECS_NOTE = 150; // accuracy of the length of the note
    
 /** The width of the frame
   */
@@ -40,23 +44,10 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener,
 /** The height of the frame
   */
    public final int HEIGHT = 400;
-   
-   /*public static void main(String[] args)
-   {
-      Piano piano = new Piano();
-      frame = new JFrame();
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      frame.setSize(piano.WIDTH, piano.HEIGHT);
-      frame.setTitle("KEYBOARD");
       
-      frame.add(piano);
-      frame.addMouseListener(piano);
-      frame.addMouseMotionListener(piano);
-      frame.setVisible(true);
-   }*/
-   
 /** Creates a piano with of the specified octave.
   *
+  * @param octave - the octave for which to create the piano
   */
    public Piano(int octave)
    {
@@ -67,7 +58,7 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener,
       blackKeys = new ArrayList<Key>();
       whiteKeys = new ArrayList<Key>();
       List<Note> whiteNotes = oneOctaveNaturals(octave);
-      for (int ii = 0; ii < 8; ii++)
+      for (int ii = 0; ii < 8; ii++) // 8 white keys
       {
          whiteKeys.add(new Key(currentX, y, whiteKeyWidth, HEIGHT, whiteNotes.get(ii)));
          currentX += whiteKeyWidth;
@@ -75,9 +66,9 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener,
       
       // create the black key objects
       List<Note> blackNotes = oneOctaveBlackKeys(octave);
-      int blackKeyWidth = whiteKeyWidth / 2;
-      int blackKeyHeight = 2 * HEIGHT / 3;
-      currentX = 4 * blackKeyWidth / 3;
+      int blackKeyWidth = whiteKeyWidth / 2; // black keys are 1/2 the width of white keys
+      int blackKeyHeight = 2 * HEIGHT / 3; // black keys are 2/3 the height of white keys
+      currentX = 4 * blackKeyWidth / 3; // all subsequent "magic numbers" are necessary for the appearance
       int count = -1; // adds 1 before accessing the index
       blackKeys.add(new Key(currentX, y, blackKeyWidth, blackKeyHeight, blackNotes.get(++count)));
       currentX += 7 * blackKeyWidth / 3;
@@ -92,13 +83,13 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener,
       // create the timer
       playNote = new Timer(MILLISECS_NOTE, this);
       
-      // create frame and add piano
+      // create frame
       JFrame frame = new JFrame();
-      Piano.frame = frame;
       frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
       frame.setSize(this.WIDTH, this.HEIGHT);
       frame.setTitle("KEYBOARD");
       
+      // add Piano, event reactors to frame 
       frame.add(this);
       frame.addMouseListener(this);
       frame.addMouseMotionListener(this);
@@ -114,10 +105,11 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener,
       this(5);
    }
    
-/** Creates a list of notes representing the "white keys" of the keyboard, starting
+/** Creates a list of notes representing the "white keys" of the piano, starting
   * with C and ending with C in the octave above
   * 
   * @param octave - the octave in which to create the notes (of the starting note)
+  * @return - a list of notes that represent the white keys of a single octave of a piano
   */
    public List<Note> oneOctaveNaturals(int octave)
    {
@@ -138,7 +130,7 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener,
   * starting with C# and ending with A#
   *
   * @param octave - the octave in which to create the notes
-  * @return - the list of notes
+  * @return - the list of notes representing the black keys of a single-octave piano
   */
    public List<Note> oneOctaveBlackKeys(int octave)
    {
@@ -267,7 +259,7 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener,
    {
       Key pressed = whichKey(event);
       current = pressed;
-      if (current != null)
+      if (current != null) // if the key pressed does not correspond to a piano key, do nothing
       {
          current.changeColor();
          repaint();
@@ -291,14 +283,15 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener,
    
 /** Called when a key is typed--nothing happens
   * 
-  * @param even - the event that indicates that a key has been typed
+  * @param event - the event that indicates that a key has been typed
   */
    public void keyTyped(KeyEvent event) {}
    
 /** Determines which keyboard key the event indicates and which piano 
   * key that keyboard key corresponds to.
   *
-  * @param event - the event that indicates the 
+  * @param event - the event that occurred
+  * @return - the piano key that corresponds to the key pressed as indicated by the event
   */
    public Key whichKey(KeyEvent event) 
    {
@@ -331,9 +324,16 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener,
       else if (code == KeyEvent.VK_L)
          return findKey(Pitch.C, Accidental.NATURAL, theOctave + 1); // the high C is the next octave
       else 
-         return null;
+         return null; // other keys do not correspond to notes
    }
       
+/** Given a pitch, accidental, and octave, finds the piano key that corresponds
+  *
+  * @param pitch - the pitch of the key seeked
+  * @param acc - the accidental of the key seeked
+  * @param octave - the octave of the key seeked
+  * @return - the key matching the parameters, otherwise null
+  */
    public Key findKey(Pitch pitch, Accidental acc, int octave)
    {
       if (acc == Accidental.NATURAL)
