@@ -1,3 +1,12 @@
+// Carolyn Lober
+// May 26, 2015
+// CS III
+// PianoMenu.java
+
+// This class contains the main method for my project that sets up 
+// a menu screen with buttons and controlls what happens when the 
+// buttons are pressed.
+
 import javax.swing.*; // JComponents
 import java.awt.*; // Layouts, Fonts
 import java.awt.event.*; // ActionListener
@@ -5,6 +14,10 @@ import java.awt.event.*; // ActionListener
 public class PianoMenu implements ActionListener
 {
    
+/** The main method sets up the JComponents that make up the initial menu screen
+  *
+  * @param args - 
+  */
    public static void main(String[] args)
    {
       //create frame, set title, layout
@@ -18,7 +31,7 @@ public class PianoMenu implements ActionListener
       Font defFont = new Font("Times New Roman", Font.ITALIC, menuFont.getSize() - 3);
       
       //create directions as JLabel, add to frame
-      String menu = "Welcome to the Clavier¹!\nWhat would you like to do?";
+      String menu = "Welcome to the Piano¹!\nWhat would you like to do?";
       JLabel menuIntro = new JLabel(menu, (int) JLabel.CENTER_ALIGNMENT);
       menuIntro.setFont(menuFont);
       frame.add(menuIntro, BorderLayout.NORTH);
@@ -47,6 +60,10 @@ public class PianoMenu implements ActionListener
       frame.setVisible(true);
    }
    
+/** Controlls what happens when a button on the menu screen is pressed
+  *
+  * @param event - the action that occured
+  */
    public void actionPerformed(ActionEvent event)
    {
       if (event.getActionCommand().equals("Play Piano"))

@@ -19,6 +19,7 @@ public class RecordPiano extends Piano implements ActionListener
       super(octave);
       notes = new ArrayList<Note>();
       startTime = 0;
+      this.printFile = printFile;
    }
    
    public RecordPiano(PrintStream printFile)
@@ -31,6 +32,7 @@ public class RecordPiano extends Piano implements ActionListener
       if (startTime != 0)
       {
          notes.add(new Note((System.currentTimeMillis() - startTime) / 1000.0, Pitch.R));
+         printFile.println(notes.get(notes.size() - 1));
       }
       startTime = System.currentTimeMillis();
       super.mousePressed(event);
@@ -44,34 +46,24 @@ public class RecordPiano extends Piano implements ActionListener
       printFile.println(notes.get(notes.size() - 1));
    }
    
-   public void actionPerformed(ActionEvent event)
+   public void keyPressed(KeyEvent event)
    {
-      JFrame frame = new JFrame();
-      JPanel panel1 = new JPanel();
-      JPanel panel2 = new JPanel();
-      
-      frame.setSize(400, 200);
-      
-      panel1.setLayout(new FlowLayout());
-      frame.setLayout(new BorderLayout());
-      panel2.setLayout(new GridLayout(2, 1));
-      
-      JLabel whichSong = new JLabel("What is your song called?", (int) JLabel.CENTER_ALIGNMENT);
-      JLabel pleaseEnter = new JLabel("The program will begin recording when you begin playing.", (int) JLabel.CENTER_ALIGNMENT);
-      JButton open = new JButton("Go!");
-      JTextField answer = new JTextField(10);
-      open.addActionListener(new CreateFile(answer));
-      
-      panel1.add(answer);
-      panel1.add(open);
-      panel2.add(whichSong);
-      panel2.add(pleaseEnter);
-      
-      frame.add(panel1, BorderLayout.SOUTH);
-      frame.add(panel2, BorderLayout.NORTH);
-      frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-      frame.pack();
-      frame.setVisible(true);
+      if (startTime != 0)
+      {
+         notes.add(new Note((System.currentTimeMillis() - startTime) / 1000.0, Pitch.R));
+         printFile.println(notes.get(notes.size() - 1));
+      }
+      startTime = System.currentTimeMillis();
+      super.keyPressed(event);
    }
+   
+   public void keyReleased(KeyEvent event)
+   {
+      super.keyReleased(event);
+      notes.add(new Note((System.currentTimeMillis() - startTime) / 1000.0, super.current.getNote().getPitch(),
+                          super.current.getNote().getAccidental(), super.current.getNote().getOctave()));
+      printFile.println(notes.get(notes.size() - 1));
+   }
+      
    
 }

@@ -64,5 +64,7 @@ public class CreateFile implements ActionListener
          }
          RecordPiano piano = new RecordPiano(file);
       }
+      
+      JOptionPane.showMessageDialog(null, "Done!");
    }
 }

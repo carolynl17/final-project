@@ -24,7 +24,7 @@ public class OpenFile implements ActionListener
       JLabel pleaseEnter = new JLabel("Please enter a file name.", (int) JLabel.CENTER_ALIGNMENT);
       JButton open = new JButton("Open file");
       input = new JTextField(10);
-      open.addActionListener(new OpenFile());
+      open.addActionListener(this);
       
       panel1.add(input);
       panel1.add(open);
@@ -51,7 +51,6 @@ public class OpenFile implements ActionListener
       try
       {
          fileScan = new Scanner(f);
-         Piano piano = new Piano();
          playSong(fileScan);
       }
       catch (FileNotFoundException e)

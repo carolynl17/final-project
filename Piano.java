@@ -1,12 +1,12 @@
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.awt.Graphics;
+import java.awt.event.*; // ActionListener, KeyListener
+import javax.swing.*; // JPanel, Timer, JFrame
+import javax.swing.event.*; // MouseInputListener
+import java.awt.Graphics; 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class Piano extends JPanel implements MouseInputListener, ActionListener
+public class Piano extends JPanel implements MouseInputListener, ActionListener, KeyListener
 {
 /** The black keys of the piano
   */
@@ -102,6 +102,7 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener
       frame.add(this);
       frame.addMouseListener(this);
       frame.addMouseMotionListener(this);
+      frame.addKeyListener(this);
       frame.setVisible(true); 
          
    }
@@ -206,7 +207,6 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener
   */
    public void mouseReleased(MouseEvent event)
    {
-      frame.update(current.getGraphics());
       playNote.stop();
       repaint();
    }
@@ -254,5 +254,109 @@ public class Piano extends JPanel implements MouseInputListener, ActionListener
       current.play(); // Timer plays the note every 10 milliseconds
    }
    
+   //NOTE: Like with MouseInputListener, I had to implement KeyListener rather
+   //       than extend KeyAdapter, so the empty method is necessary
+   
+/** Called when a key is pressed. Acts like the mouse pressed method--
+  * plays the piano key that corresponds to the key pressed and changes
+  * its color. 
+  *
+  * @param event - the event that indicates that a key has been pushed
+  */
+   public void keyPressed(KeyEvent event)
+   {
+      Key pressed = whichKey(event);
+      current = pressed;
+      if (current != null)
+      {
+         current.changeColor();
+         repaint();
+         playNote.start();
+      }
+   }
+   
+/** Called when a key is released. Acts like the mouse released method--
+  * stops the current note and un-colors the key
+  *
+  * @param event - the event that indicates that a key has been released
+  */
+   public void keyReleased(KeyEvent event)
+   {
+      if (current != null)
+      {
+         playNote.stop();
+         repaint();
+      }
+   }
+   
+/** Called when a key is typed--nothing happens
+  * 
+  * @param even - the event that indicates that a key has been typed
+  */
+   public void keyTyped(KeyEvent event) {}
+   
+/** Determines which keyboard key the event indicates and which piano 
+  * key that keyboard key corresponds to.
+  *
+  * @param event - the event that indicates the 
+  */
+   public Key whichKey(KeyEvent event) 
+   {
+      int theOctave = whiteKeys.get(0).getNote().getOctave(); // the octave of keyboard for all but the high C
+      int code = event.getKeyCode();
+      if (code == KeyEvent.VK_S)
+         return findKey(Pitch.C, Accidental.NATURAL, theOctave);
+      else if (code == KeyEvent.VK_E)
+         return findKey(Pitch.C, Accidental.SHARP, theOctave);
+      else if (code == KeyEvent.VK_D)
+         return findKey(Pitch.D, Accidental.NATURAL, theOctave);
+      else if (code == KeyEvent.VK_R)
+         return findKey(Pitch.D, Accidental.SHARP, theOctave);
+      else if (code == KeyEvent.VK_F)
+         return findKey(Pitch.E, Accidental.NATURAL, theOctave);
+      else if (code == KeyEvent.VK_G)
+         return findKey(Pitch.F, Accidental.NATURAL, theOctave);
+      else if (code == KeyEvent.VK_Y)
+         return findKey(Pitch.F, Accidental.SHARP, theOctave);
+      else if (code == KeyEvent.VK_H)
+         return findKey(Pitch.G, Accidental.NATURAL, theOctave);
+      else if (code == KeyEvent.VK_U)
+         return findKey(Pitch.G, Accidental.SHARP, theOctave);
+      else if (code == KeyEvent.VK_J)
+         return findKey(Pitch.A, Accidental.NATURAL, theOctave);
+      else if (code == KeyEvent.VK_I)
+         return findKey(Pitch.A, Accidental.SHARP, theOctave);
+      else if (code == KeyEvent.VK_K)
+         return findKey(Pitch.B, Accidental.NATURAL, theOctave);
+      else if (code == KeyEvent.VK_L)
+         return findKey(Pitch.C, Accidental.NATURAL, theOctave + 1); // the high C is the next octave
+      else 
+         return null;
+   }
+      
+   public Key findKey(Pitch pitch, Accidental acc, int octave)
+   {
+      if (acc == Accidental.NATURAL)
+      {
+         for (Key k : whiteKeys)
+         {
+            if (k.getNote().getPitch() == pitch && k.getNote().getOctave() == octave)
+            {  // ^ the octave only makes a difference with the upper and lower C's 
+               return k;
+            }
+         }
+      }
+      else 
+      {
+         for (Key k : blackKeys)
+         {
+            if (k.getNote().getPitch() == pitch)
+            {
+               return k;
+            }
+         }
+      }
+      return null;
+   }
    
 }
